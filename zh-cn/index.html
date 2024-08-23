@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head>
-	<meta name="generator" content="Hugo 0.132.1"><meta charset='utf-8'>
+	<meta name="generator" content="Hugo 0.133.0"><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="演示说明">
 <title>演示站点</title>
 
@@ -402,5 +402,51 @@
     }());
 </script>
 
+<script type="text/javascript">
+
+const live2d_path = "https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/";
+
+
+
+function loadExternalResource(url, type) {
+	return new Promise((resolve, reject) => {
+		let tag;
+
+		if (type === "css") {
+			tag = document.createElement("link");
+			tag.rel = "stylesheet";
+			tag.href = url;
+		}
+		else if (type === "js") {
+			tag = document.createElement("script");
+			tag.src = url;
+		}
+		if (tag) {
+			tag.onload = () => resolve(url);
+			tag.onerror = () => reject(url);
+			document.head.appendChild(tag);
+		}
+	});
+}
+
+
+if (screen.width >= 768) {
+	Promise.all([
+		loadExternalResource(live2d_path + "waifu.css", "css"),
+		loadExternalResource(live2d_path + "live2d.min.js", "js"),
+		loadExternalResource(live2d_path + "waifu-tips.js", "js")
+	]).then(() => {
+		
+		initWidget({
+			waifuPath: live2d_path + "waifu-tips.json",
+			
+			cdnPath: "https://fastly.jsdelivr.net/gh/fghrsh/live2d_api/",
+			tools: ["hitokoto", "asteroids", "switch-model", "switch-texture", "photo", "info", "quit"]
+		});
+	});
+}
+
+
+</script>
     </body>
 </html>
